@@ -5,14 +5,14 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 public static class LocalDataImpl
 {
-    private static readonly string directory = "/CrossPromo/";
+    private static readonly string Directory = "/CrossPromo/";
 
     public static string GetFilePath(string filename)
     {
         Debug.Log("Get file path" + filename);
 
         CreateDirIfNotExist();
-        string path = Application.persistentDataPath + directory + filename;
+        string path = Application.persistentDataPath + Directory + filename;
         if (File.Exists(path))
         {
             return path;
@@ -37,7 +37,7 @@ public static class LocalDataImpl
         Debug.Log("Get object data");
 
         CreateDirIfNotExist();
-        string path = Application.persistentDataPath + directory + filename;
+        string path = Application.persistentDataPath + Directory + filename;
         if (File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();
@@ -56,7 +56,7 @@ public static class LocalDataImpl
         Debug.Log("Saving list of data");
 
         CreateDirIfNotExist();
-        string path = Application.persistentDataPath + directory + filename;
+        string path = Application.persistentDataPath + Directory + filename;
         BinaryFormatter formatter = new BinaryFormatter();
         FileStream stream = new FileStream(path, FileMode.Create);
         formatter.Serialize(stream, data);
@@ -65,11 +65,11 @@ public static class LocalDataImpl
 
     public static string CreateDirIfNotExist()
     {
-        string dir = Application.persistentDataPath + directory;
-        if (!Directory.Exists(dir))
+        string dir = Application.persistentDataPath + Directory;
+        if (!System.IO.Directory.Exists(dir))
         {
             Debug.Log("Creating dir at " + dir);
-            Directory.CreateDirectory(dir);
+            System.IO.Directory.CreateDirectory(dir);
         }
 
         return dir;

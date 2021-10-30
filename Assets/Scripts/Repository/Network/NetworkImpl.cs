@@ -5,10 +5,10 @@ using UnityEngine.Networking;
 
 public class NetworkImpl 
 {
-    private readonly ISerializationOption serializationOption;
+    private readonly ISerializationOption SerializationOption;
     public NetworkImpl(ISerializationOption serializationOption)
     {
-        this.serializationOption = serializationOption;
+        SerializationOption = serializationOption;
     }
 
     public IEnumerator Get(string endpoint) => Get<string>(endpoint, null);
@@ -17,7 +17,7 @@ public class NetworkImpl
         Debug.Log($"Send request to {endpoint}");
 
         UnityWebRequest request = UnityWebRequest.Get(endpoint);
-        request.SetRequestHeader("Content-Type", serializationOption.ContentType);
+        request.SetRequestHeader("Content-Type", SerializationOption.ContentType);
         yield return request.SendWebRequest();
 
         if (request.result != UnityWebRequest.Result.Success)
@@ -26,7 +26,7 @@ public class NetworkImpl
         }
 
         var jsonResponse = request.downloadHandler.text;
-        var result = serializationOption.Deserialize<T>(jsonResponse);
+        var result = SerializationOption.Deserialize<T>(jsonResponse);
 
         if (result != null)
         {
@@ -39,7 +39,7 @@ public class NetworkImpl
         Debug.Log($"Send request to {endpoint}");
 
         UnityWebRequest request = UnityWebRequest.Get(endpoint);
-        request.SetRequestHeader("Content-Type", serializationOption.ContentType);
+        request.SetRequestHeader("Content-Type", SerializationOption.ContentType);
         yield return request.SendWebRequest();
 
         if (request.result != UnityWebRequest.Result.Success)
