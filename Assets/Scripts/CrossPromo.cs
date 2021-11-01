@@ -60,11 +60,17 @@ public class CrossPromo : MonoBehaviour
 
         // Init variables
         mVideoPlayer = GetComponent<VideoPlayer>();
-        mDataManager = new DataManager(new NetworkImpl(new JsonSerializationOption()), PlayVideo);
+        mDataManager = new DataManager(new NetworkImpl(new JsonSerializationOption()), PlayVideoAndStartDownload);
 
         // Register to finish event 
         mVideoPlayer.loopPointReached += VideoFinishEvent;
         StartCoroutine(mDataManager.FetchVideos());
+    }
+
+    public void PlayVideoAndStartDownload()
+    {
+        PlayVideo();
+        StartCoroutine(mDataManager.DownloadNewFiles());
     }
 
     public void OnVideoClicked()
