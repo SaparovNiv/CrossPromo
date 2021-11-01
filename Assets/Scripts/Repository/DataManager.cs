@@ -32,7 +32,6 @@ public class DataManager
         var diffDataVideos = DiffVidedoData(localDataVideos,videos.results);
         this.VideoClipsDataset = MergeVideoList(localDataVideos, diffDataVideos);
         StartPlayingCallback();
-        DownloadNewFiles();
     }
 
     public IEnumerator DownloadNewFiles()

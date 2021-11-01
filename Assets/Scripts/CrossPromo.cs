@@ -15,7 +15,7 @@ public class CrossPromo : MonoBehaviour
         if (!mVideoPlayer.isPrepared) return;
 
         ClipCurrentIndex = ClipCurrentIndex + 1 >= mDataManager.DatasetCount() ? 0 : ClipCurrentIndex + 1;
-        StartPlay();
+        PlayVideo();
     }
 
     public void Previous()
@@ -23,7 +23,7 @@ public class CrossPromo : MonoBehaviour
         if (!mVideoPlayer.isPrepared) return;
 
         ClipCurrentIndex = ClipCurrentIndex - 1 < 0 ? mDataManager.DatasetCount() - 1 : ClipCurrentIndex - 1;
-        StartPlay();
+        PlayVideo();
     }
 
     public void Pause()
@@ -42,12 +42,12 @@ public class CrossPromo : MonoBehaviour
         }
     }
 
-    private void StartPlay()
+    private void PlayVideo()
     {
         Debug.Log($"Playing video {CurrentItem.id}, from cached? {CurrentItem.isCached}");
         mVideoPlayer.url = CurrentItem.video_url;
         mVideoPlayer.Play();
-        StartCoroutine(mDataManager.DownloadNewFiles());
+
     }
     private void VideoFinishEvent(VideoPlayer vp)
     {
@@ -60,11 +60,17 @@ public class CrossPromo : MonoBehaviour
 
         // Init variables
         mVideoPlayer = GetComponent<VideoPlayer>();
-        mDataManager = new DataManager(new NetworkImpl(new JsonSerializationOption()), StartPlay);
+        mDataManager = new DataManager(new NetworkImpl(new JsonSerializationOption()), PlayVideoAndStartDownload);
 
         // Register to finish event 
         mVideoPlayer.loopPointReached += VideoFinishEvent;
         StartCoroutine(mDataManager.FetchVideos());
+    }
+
+    public void PlayVideoAndStartDownload()
+    {
+        PlayVideo();
+        StartCoroutine(mDataManager.DownloadNewFiles());
     }
 
     public void OnVideoClicked()
